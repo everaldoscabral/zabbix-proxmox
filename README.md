@@ -9,7 +9,7 @@ Get cluster and node details from the Proxmox API and report them to Zabbix usin
 
 ## Installation
 
-## Se faz necessário ter ao menos Python3 instalado no Server/Proxy que irá monitorar o Proxmox.
+## It is necessary to have at least Python3 installed on the Server / Proxy that will monitor Proxmox.
 
 The script can run on any host with Python, a functional zabbix_sender and access to the Proxmox API. A Zabbix server or Zabbix proxy would be logical candidates.
 
