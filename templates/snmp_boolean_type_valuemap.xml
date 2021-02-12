@@ -8,11 +8,11 @@
             <mappings>
                 <mapping>
                     <value>0</value>
-                    <newvalue>False</newvalue>
+                    <newvalue>Offline</newvalue>
                 </mapping>
                 <mapping>
                     <value>1</value>
-                    <newvalue>True</newvalue>
+                    <newvalue>Online</newvalue>
                 </mapping>
             </mappings>
         </value_map>
