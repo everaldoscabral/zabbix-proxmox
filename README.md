@@ -80,7 +80,7 @@ The value for the -s parameter is the host you configured in the zabbix GUI to r
 
 ## Example / Screenshot
 
-![Latest Data](Latest_data.png)
+![Latest Data](Latest_data.PNG)
 
 ## License
 
