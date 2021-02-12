@@ -78,6 +78,10 @@ sent: 1; skipped: 0; total: 1
 
 The value for the -s parameter is the host you configured in the zabbix GUI to receive the data and attached the template to. That is the value you should use for the -t parameter with the script. (please note that the key value of the -k parameter is currently indeed promox.cluster.quorate an unfortunate typo mentioned under notes as well).
 
+## Example / Screenshot
+
+![Latest Data](Latest_data.png)
+
 ## License
 
 This software is licensed under GNU General Public License v3.0
