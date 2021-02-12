@@ -9,10 +9,12 @@ Get cluster and node details from the Proxmox API and report them to Zabbix usin
 
 ## Installation
 
+## Se faz necessário ter ao menos Python3 instalado no Server/Proxy que irá monitorar o Proxmox.
+
 The script can run on any host with Python, a functional zabbix_sender and access to the Proxmox API. A Zabbix server or Zabbix proxy would be logical candidates.
 
-  * Install Python proxmoxer: `pip install proxmoxer`
-  * Install Python requests: `pip install requests`
+  * Install Python proxmoxer: `pip3 install proxmoxer`
+  * Install Python requests: `pip3 install requests`
   * Copy script **scripts/proxmox_cluster.py** and make it executable. The script is executed from cron or systemd timers and can be placed anywhere logical.
   * Import the valuemap **templates/snmp_boolean_type_valuemap.xml** into your Zabbix server. This valuemap is used to display quorum and nodes online status.
   * Import the template **templates/proxmox_cluster_template.xml** into your Zabbix server.
@@ -22,8 +24,8 @@ The script can run on any host with Python, a functional zabbix_sender and acces
   * Set a password for the zabbix user in Proxmox: `pveum passwd zabbix@pve`
   * Grant read only permissions to the zabbix user. The built in **PVEAuditor** role seems a good choice: `pveum aclmod / -user zabbix@pve -role PVEAuditor`
   * Set up scheduled tasks executing the script. The following two examples use cron: `crontab -e -u zabbix`
-    * Send discovery data: `0 */4 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx01.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod -d`
-    * Send item data: `*/10 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx01.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod`
+    * Send discovery data: `0 */4 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx01.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod -d`
+    * Send item data: `*/10 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx01.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod`
 
 ## Configuration
 
@@ -49,11 +51,11 @@ If there is no load balancer fronting the API it would make sense to use multipl
 
 ```
 # Item updates every 10 minutes
-0,20,40 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx01.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod
-10,30,50 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx02.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod
+0,20,40 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx01.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod
+10,30,50 * * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx02.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod
 # LLD updates every 4 hours
-23 0,8,16 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx01.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod -d
-38 4,12,20 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a pmx02.your.tld -u zabbix@pve -p password -t proxmox.tokyo.prod -d 
+23 0,8,16 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx01.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod -d
+38 4,12,20 * * * /usr/lib/zabbix/bin/proxmox_cluster.py -a "pmx02.your.tld" -u zabbix@pve -p password -t proxmox.tokyo.prod -d 
 ```
 
 One of the zabbix item keys in the script, and template, is prefixed ```promox```. That is obviously a typo but changing it would mean breaking compatability with existing installations. Changing the key in zabbix would mean losing historical data which is also undesirable. This is purely a cosmetic issue but if desirable you can of course change the prefix for those items. In that case also make sure that the keys in the template are updated accordingly.
@@ -69,7 +71,7 @@ Verified against Proxmox 6, Python 3.6 and Zabbix 5.0.
 The first step when diagnosing issues is to ensure that zabbix_sender is working and the target host in zabbix is configured correctly. Try the following command on the host where the script is going to run. This should return "processed: 1; failed: 0":
 
 ```
-[user@zabbix ~]# /usr/bin/zabbix_sender -v -c /etc/zabbix/zabbix_agentd.conf -s proxmox.tokyo.prod -k promox.cluster.quorate -o 1
+[user@zabbix ~]# /usr/bin/zabbix_sender -v -c /etc/zabbix/zabbix_agentd.conf -s "proxmox.tokyo.prod" -k promox.cluster.quorate -o 1
 Response from "127.0.0.1:10051": "processed: 1; failed: 0; total: 1; seconds spent: 0.000036"
 sent: 1; skipped: 0; total: 1
 ```
